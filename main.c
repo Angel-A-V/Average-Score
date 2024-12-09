@@ -10,12 +10,17 @@ void printArray(int *arr, int len) {
     }
         printf("\n");
     }
-    
+
+// Function to preform selection sort on the orig array and store the result into sorted
 void selSort(int len) {
     int i, j, temp;
+
+    // Copy the elements from orig and store them into the sorted array to preserve the original state
     for (int i = 0; i < len; ++i) {
         sorted[i] = orig[i];
     }
+
+    // Preform selection sort in descending order
     for (i = 0; i < len - 1; i++) {
         // Find the max element in sorted[i..len-1].
         int maxIndex = i; // Assume 1st element in sorted[i..len-1] is the max.
@@ -32,9 +37,11 @@ void selSort(int len) {
 }
 // Recursive summation of arr[0..len - 1]
 int calcSum(int *arr, int len){
+    // Base case if the length is zero
     if (len <= 0)
         return 0;
-        return (calcSum(arr, len - 1) + arr[len - 1]);
+    
+    return (calcSum(arr, len - 1) + arr[len - 1]);
 }
 
 
