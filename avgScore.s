@@ -120,20 +120,25 @@ print_array:
 selSort:
 	# Your implementation of selSort here
 
-	move $t0, $0				# i = 0
+	move $t0, $0				# Intialize the index i = 0
 
+copy_array:
+	sll $t1, $t0, 2				# Get the byte offset for orig
+	add $t1, $t1, $s1			# Add the byte offset to the base address of orig to get the memory address
+	lw $v0, 0($t1)				# Load the value from orig[i] into $v0
 
+	sll $t2, $t0, 2				# Get the byte offset for sorted 
+	add $t2, $t2, $s2			# Add the byte offset to the base address of sorted to get the memory address
+	sw $v0, 0($t2)				# Store the value into sorted[i]
 
-
-Copy
-
-
-	
-
+	addi $t0, $t0, 1			# Increament index i += 1
+	bne $t0, $a0, copy_array	# If our i != the len, continue copying 
 	
 	jr $ra
 	
+selection_sort1:
 	
+
 # calcSum takes in an array and its size as arguments.
 # It RECURSIVELY computes and returns the sum of elements in the array.
 # Note: you MUST NOT use iterative approach in this function.
