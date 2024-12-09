@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Declare arrays for the original and for the sorted scores, with a maximum size 25
 int orig[25], sorted[25];
 // Print contents of arr in a single line
 void printArray(int *arr, int len) {
@@ -57,6 +58,6 @@ int main() {
     scanf("%d", &drop);
     printf("Average (rounded down) with dropped scores removed: %d\n",
     calcSum(sorted, numScores - drop)/(numScores - drop));
-    
+
     return 0;
 }
