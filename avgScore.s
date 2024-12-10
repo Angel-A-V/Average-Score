@@ -74,11 +74,22 @@ loop_in:
 	jal calcSum						# Call calcSum to RECURSIVELY compute the sum of scores that are not dropped
 
 	# Your code here to compute average and print it
-						
-	lw $ra, 0($sp)
-	addi $sp, $sp 4
-	li $v0, 10 
-	syscall
+    move $t0, $v0                  # Store sum in $t0 (v0 contains sum)
+    div $t0, $a1                   # Divide sum by remaining scores
+    mflo $t0                       # Store quotient in $t0 (average)
+    
+    li $v0, 4                      # Print average message
+    la $a0, str5
+    syscall
+
+    li $v0, 1                      # Print the average
+    move $a0, $t0
+    syscall
+
+    lw $ra, 0($sp)                 # Restore return address
+    addi $sp, $sp, 4               # Restore stack pointer
+    li $v0, 10                     # Exit syscall
+    syscall
 	
 	
 # printList takes in an array and its size as arguments. 
@@ -187,7 +198,27 @@ end_func:
 # It RECURSIVELY computes and returns the sum of elements in the array.
 # Note: you MUST NOT use iterative approach in this function.
 calcSum:
-	# Your implementation of calcSum here
-	
-	jr $ra
+    move $t0, $a2                   # Number of lowest scores to drop
+    move $t1, $a0                   # Array base address
+    move $t2, $a1                   # Array size
+    move $t3, $0                    # Initialize sum to 0
+    move $s0, $0                    # Initialize index to 0
+
+calcSum_loop:
+    beq $s0, $t2, calcSum_fin      # Base case: if index == len, return sum
+
+    blt $s0, $t0, calcSum_skip      # If index < lowest scores to drop, skip this element
+
+    sll $t4, $s0, 2                 # Calculate byte offset for array[index]
+    add $t4, $t4, $t1               # Add to array base address
+    lw $t5, 0($t4)                  # Load array element into $t5
+    add $t3, $t3, $t5               # Add element to sum
+
+calcSum_skip:
+    addi $s0, $s0, 1                # Increment index
+    j calcSum_loop                  # Continue loop
+
+calcSum_fin:
+    move $v0, $t3                   # Return sum in $v0
+    jr $ra       
 	
