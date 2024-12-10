@@ -157,25 +157,28 @@ selection_sort3:
 	addi $t1, $t1, 1				# Increment inner loop index (j)
 	bne $t1, $a0, selection_sort2	# Continue inner loop until j < len
 
+	# Swap sorted[i] and sorted[largest]
 	sll $t5, $t2, 2					# Get offset for sorted[largest]
 	add $t5, $t5, $s2               # Add the byte offset to the base address of sorted to get the memory address
 	lw $t6, 0($t5)					# Load sorted[largest] into $t6
 
-	sll $t3, $t0, 2
-	add $t3, $t3, $s2
-	lw $t4, 0($t3)
+	sll $t3, $t0, 2					# Calculate the byte offset for sorted[i]					
+	add $t3, $t3, $s2				# Add the byte offset to the base address of sorted to get the memory address of sorted[i]
+	lw $t4, 0($t3)					# Load the value of the sorted[largest] into $t4
 
-	sll $t5, $t2, 2,
-	add $t5, $t5, $s2
-	sw $t4, 0($t5)
+	# Store the value of sorted[i] into sorted[largest]
+	sll $t5, $t2, 2,				# Calculate the byte offset for sorted[i]
+	add $t5, $t5, $s2				# Add the byte offset to the base address of sorted to get the memory address of sorted[i]
+	sw $t4, 0($t5)					# Store the value of sorted[i] into sorted[largest]
 
-	sll $t3, $t0, 2
-	add $t3, $t3, $s2
-	sw $t6, 0($t3)
+	# Store the value of sorted[largest] into sorted[i]
+	sll $t3, $t0, 2					# Calculate the byte offset for sorted[i]
+	add $t3, $t3, $s2				# Add the byte offset to the base address of sorted to get the memory address of sorted[i]
+	sw $t6, 0($t3)					# Store the value of sorted[largest] into sorted[i]
 
-	addi $t0, $t0, 1
-	addi $t7, $a0, -1
-	bne $t0, $t7, selection_sort1
+	addi $t0, $t0, 1				# Increament the index
+	addi $t7, $a0, -1				# Calculate len - 1 (last valid index for sorting)
+	bne $t0, $t7, selection_sort1	# If i != len - 1, repeat the loop
 
 end_func:
 	jr $ra
